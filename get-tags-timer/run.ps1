@@ -66,7 +66,7 @@ $sqlCommand.Parameters.AddWithValue("@JsonData", $csv)
 # $sqlCommand.Parameters = $jsonData
 ##exicute proc
 $sqlCommand.ExecuteNonQuery()
-
+$dbConnection.Close()
 
 
 # Write an information log with the current time.
