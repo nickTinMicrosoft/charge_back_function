@@ -51,8 +51,8 @@ Write-Host $csv
 
 
 #setup login to SQL MI
-$userName = $env:USER_NAME
-$password = $env:USER_PASSWORD
+$userName = $env:SQL_USER_NAME
+$password = $env:SQL_USER_PASSWORD
 
 # ##connect to db
 $dbConnection = new-object System.Data.SqlClient.SqlConnection
