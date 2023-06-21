@@ -17,6 +17,13 @@ if(-not $action){
     $action = $Request.Body.Action
 }
 
+# {
+#     "Admin":"Test",
+#     "Password":"Test Two"
+# }
+
+
+
 function Execute-SQL{
     param(
         $query
@@ -82,8 +89,8 @@ if($action -eq "get"){
 
 
     #setup login to SQL MI
-    $userName = $env:USER_NAME
-    $password = $env:USER_PASSWORD
+    $userName = $env:SQL_USER_NAME
+    $password = $env:SQL_USER_PASSWORD
 
     # ##connect to db
     $dbConnection = new-object System.Data.SqlClient.SqlConnection
@@ -108,11 +115,6 @@ if($action -eq "truncate"){
     Execute-SQL -query "Truncate Table dbo.environment_info"
 }
 
-if($action -eq "build"){
-    $body = "Idea to build SQL DB, Tables, and Procs"
-}
-
-# $body = "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
 
 if ($name) {
     $body = "Hello, $name. This HTTP triggered function executed successfully."
