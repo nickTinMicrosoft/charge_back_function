@@ -11,8 +11,8 @@ if ($Timer.IsPastDue) {
 Import-Module Az.Accounts
 Import-Module Az.Sql
 
-$resourceGroupName = 'rg-sql-transactionals'
-$managedInstanceName = 'tins-sqlmi-demo'
+$resourceGroupName =  $env:RESOURCE_GROUP
+$managedInstanceName = $env:MANAGED_INSTANCE_NAME
 
 #connect to Azure and get subscription information
 Connect-AzAccount -Identity
