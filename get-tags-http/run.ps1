@@ -21,18 +21,18 @@ if(-not $action){
 #     "Admin":"Test",
 #     "Password":"Test Two"
 # }
-
+$userName = $env:SQL_USER_NAME
+$password = $env:SQL_USER_PASSWORD
+$connection_string = $env:SQL_CONNECTION_STRING
 
 
 function Execute-SQL{
     param(
         $query
     )
-    $userName = $env:USER_NAME
-    $password = $env:USER_PASSWORD
 
     $dbConnection = new-object System.Data.SqlClient.SqlConnection
-    $dbConnection.ConnectionString = "Data Source=tcp:tins-sqlmi-demo.public.21bf3cd12c20.database.windows.net,3342;Initial Catalog=usage_history;User ID=$userName;Password=$password"
+    $dbConnection.ConnectionString = "Data Source=$connection_string;Initial Catalog=usage_history;User ID=$userName;Password=$password"
     $dbConnection.open()
 
     ##command
@@ -89,12 +89,13 @@ if($action -eq "get"){
 
 
     #setup login to SQL MI
-    $userName = $env:SQL_USER_NAME
-    $password = $env:SQL_USER_PASSWORD
+    # $userName = $env:SQL_USER_NAME
+    # $password = $env:SQL_USER_PASSWORD
+    # $connection_string = $env:SQL_CONNECTION_STRING
 
-    # ##connect to db
+    # ##connect to db --
     $dbConnection = new-object System.Data.SqlClient.SqlConnection
-    $dbConnection.ConnectionString = "Data Source=tcp:tins-sqlmi-demo.public.21bf3cd12c20.database.windows.net,3342;Initial Catalog=usage_history;User ID=$userName;Password=$password"
+    $dbConnection.ConnectionString = "Data Source=$connection_string;Initial Catalog=usage_history;User ID=$userName;Password=$password"
     $dbConnection.open()
     ##command
     $sqlCommand = new-object System.Data.SqlClient.SqlCommand 
