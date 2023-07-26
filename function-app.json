@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.18.4.5664",
-      "templateHash": "11667190856990786543"
+      "templateHash": "8204725580380754729"
     }
   },
   "parameters": {
@@ -42,8 +42,8 @@
     "sqlPassword": {
       "type": "securestring"
     },
-    "sqlConnectionString":{
-      "type": "string"
+    "sqlConnectionString": {
+      "type": "securestring"
     },
     "azureEnvironment": {
       "type": "string",
@@ -59,11 +59,15 @@
     },
     "gitRepoUrl": {
       "type": "string",
-      "defaultValue": "https://github.com/nickTinMicrosoft/charge_back_function.git"
+      "defaultValue": "https://github.com/lukearp/Luke-Function-Demo.git"
     },
     "gitBranch": {
       "type": "string",
-      "defaultValue": "master"
+      "defaultValue": "deploy"
+    },
+    "zipUrl": {
+      "type": "string",
+      "defaultValue": "https://github.com/lukearp/Luke-Function-Demo/releases/download/Current/Release-6.22.2023.zip"
     }
   },
   "variables": {
@@ -117,7 +121,7 @@
         "type": "SystemAssigned"
       },
       "tags": "[parameters('tags')]",
-      "properties": "[if(equals(parameters('sqlMiPublicEndpoint'), true()), createObject('enabled', true(), 'serverFarmId', resourceId('Microsoft.Web/serverfarms', format('{0}-Plan', parameters('functionName'))), 'siteConfig', createObject('appSettings', createArray(createObject('name', 'FUNCTIONS_EXTENSION_VERSION', 'value', '~4'), createObject('name', 'FUNCTIONS_WORKER_RUNTIME', 'value', 'powershell'), createObject('name', 'WEBSITE_RUN_FROM_PACKAGE', 'value', '0'), createObject('name', 'AzureWebJobsStorage', 'value', format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix={2}', parameters('stroageAccountName'), listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('stroageAccountName')), '2022-09-01').keys[0].value, variables('suffix'))), createObject('name', 'RESOURCE_GROUP', 'value', parameters('managedInstanceResourceGroup')), createObject('name', 'MANAGED_INSTANCE_NAME', 'value', parameters('managedInstanceName')), createObject('name', 'SQL_USER_NAME', 'value', parameters('sqlUserName')), createObject('name', 'SQL_USER_PASSWORD', 'value', parameters('sqlPassword')), createObject('name', 'SQL_CONNECTION_STRING', 'value', parameters('sqlConnectionString'))), 'netFrameworkVersion', 'v6.0', 'powerShellVersion', '7.2', 'alwaysOn', true())), createObject('enabled', true(), 'serverFarmId', resourceId('Microsoft.Web/serverfarms', format('{0}-Plan', parameters('functionName'))), 'siteConfig', createObject('appSettings', createArray(createObject('name', 'FUNCTIONS_EXTENSION_VERSION', 'value', '~4'), createObject('name', 'FUNCTIONS_WORKER_RUNTIME', 'value', 'powershell'), createObject('name', 'AzureWebJobsStorage', 'value', format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix={2}', parameters('stroageAccountName'), listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('stroageAccountName')), '2022-09-01').keys[0].value, variables('suffix'))), createObject('name', 'RESOURCE_GROUP', 'value', parameters('managedInstanceResourceGroup')), createObject('name', 'MANAGED_INSTANCE_NAME', 'value', parameters('managedInstanceName')), createObject('name', 'SQL_USER_NAME', 'value', parameters('sqlUserName')), createObject('name', 'SQL_USER_PASSWORD', 'value', parameters('sqlPassword')), createObject('name', 'SQL_CONNECTION_STRING', 'value', parameters('sqlConnectionString'))), 'netFrameworkVersion', 'v6.0', 'powerShellVersion', '7.2', 'alwaysOn', true()), 'virtualNetworkSubnetId', parameters('subnetIdForVNETIntegration'), 'vnetRouteAllEnabled', parameters('vnetRouteAll')))]",
+      "properties": "[if(equals(parameters('sqlMiPublicEndpoint'), true()), createObject('enabled', true(), 'serverFarmId', resourceId('Microsoft.Web/serverfarms', format('{0}-Plan', parameters('functionName'))), 'siteConfig', createObject('appSettings', createArray(createObject('name', 'FUNCTIONS_EXTENSION_VERSION', 'value', '~4'), createObject('name', 'FUNCTIONS_WORKER_RUNTIME', 'value', 'powershell'), createObject('name', 'AzureWebJobsStorage', 'value', format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix={2}', parameters('stroageAccountName'), listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('stroageAccountName')), '2022-09-01').keys[0].value, variables('suffix'))), createObject('name', 'RESOURCE_GROUP', 'value', parameters('managedInstanceResourceGroup')), createObject('name', 'MANAGED_INSTANCE_NAME', 'value', parameters('managedInstanceName')), createObject('name', 'SQL_USER_NAME', 'value', parameters('sqlUserName')), createObject('name', 'SQL_USER_PASSWORD', 'value', parameters('sqlPassword')), createObject('name', 'SQL_CONNECTION_STRING', 'value', parameters('sqlConnectionString'))), 'netFrameworkVersion', 'v6.0', 'powerShellVersion', '7.2', 'alwaysOn', true(), 'cors', createObject('allowedOrigins', createArray('https://portal.azure.com')))), createObject('enabled', true(), 'serverFarmId', resourceId('Microsoft.Web/serverfarms', format('{0}-Plan', parameters('functionName'))), 'siteConfig', createObject('appSettings', createArray(createObject('name', 'FUNCTIONS_EXTENSION_VERSION', 'value', '~4'), createObject('name', 'FUNCTIONS_WORKER_RUNTIME', 'value', 'powershell'), createObject('name', 'AzureWebJobsStorage', 'value', format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix={2}', parameters('stroageAccountName'), listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('stroageAccountName')), '2022-09-01').keys[0].value, variables('suffix'))), createObject('name', 'RESOURCE_GROUP', 'value', parameters('managedInstanceResourceGroup')), createObject('name', 'MANAGED_INSTANCE_NAME', 'value', parameters('managedInstanceName')), createObject('name', 'SQL_USER_NAME', 'value', parameters('sqlUserName')), createObject('name', 'SQL_USER_PASSWORD', 'value', parameters('sqlPassword')), createObject('name', 'SQL_CONNECTION_STRING', 'value', parameters('sqlConnectionString'))), 'netFrameworkVersion', 'v6.0', 'powerShellVersion', '7.2', 'alwaysOn', true(), 'cors', createObject('allowedOrigins', createArray('https://portal.azure.com'))), 'virtualNetworkSubnetId', parameters('subnetIdForVNETIntegration'), 'vnetRouteAllEnabled', parameters('vnetRouteAll')))]",
       "dependsOn": [
         "[resourceId('Microsoft.Web/serverfarms', format('{0}-Plan', parameters('functionName')))]",
         "[resourceId('Microsoft.Storage/storageAccounts', parameters('stroageAccountName'))]",

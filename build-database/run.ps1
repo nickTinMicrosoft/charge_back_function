@@ -11,16 +11,59 @@ if(-not $action){
     $action = $Request.Body.Action
 }
 
-$admin_user = $Request.Body.Admin
-$admin_password = $Request.Body.Password
+$userName = $env:SQL_USER_NAME
+$password = $env:SQL_USER_PASSWORD
+$connection_string = $env:SQL_CONNECTION_STRING
+
+
+function Execute-SQL{
+    param(
+        $query
+        ,$step
+    )
+
+    $dbConnection = new-object System.Data.SqlClient.SqlConnection
+    if($step -eq 1){
+        $dbConnection.ConnectionString = "Data Source=$connection_string;User ID=$userName;Password=$password"
+    }
+    else{
+        $dbConnection.ConnectionString = "Data Source=$connection_string;Initial Catalog=usage_history;User ID=$userName;Password=$password"
+    }
+    
+    $dbConnection.open()
+
+    ##command
+    $sqlCommand = new-object System.Data.SqlClient.SqlCommand 
+    $sqlCommand.Connection = $dbConnection
+    $sqlCommand.CommandText = $query
+    # $sqlCommand.Parameters.AddWithValue("@JsonData", $csv)
+    # $sqlCommand.Parameters = $jsonData
+    ##exicute proc
+    $sqlCommand.ExecuteNonQuery()
+    $dbConnection.Close()
+
+}
 
 if($action -eq "build"){
     $body = "Idea to build SQL DB, Tables, and Procs, under construction"
     #execute build Database
 
-    $message = "User name $($admin_user) Password $($admin_password)"
+    #get list of file names
+    $path = '.\SQL'
+    $fileList = Get-ChildItem -Path $path -File
+    $step = 1
 
-    Write-Host $message
+    foreach($file in $fileList){
+        
+        $text = Get-Content -Path "$($path)\$($file.Name)"
+        Write-Host "executing SQL File: $($file.Name) Step $($step)"
+
+        Execute-SQL -query $text -step $step
+
+        $step = $step + 1
+
+    }
+
 
 
 
