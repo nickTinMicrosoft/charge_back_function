@@ -1,26 +1,6 @@
-create table dbo.usage_history_tbl
-(
-	history_id int primary key identity(1,1)
-	,[database_name] varchar(300)
-	,cpu_seconds int
-	,io_mb int
-	,mem_mb int
-	,storage_type varchar(400)
-	,size_mb float
-	,load_date datetime2
-
-);
-
-create table dbo.environment_info
-(
-	table_id int primary key identity(1,1)
-	,mi_name varchar(600)
-	,[database_name] varchar(600)
-	,[subscription_name] varchar(1000)
-	,[resource_group] varchar(1000)
-	,[tag_name] varchar(1000)
-	,[tag_value] varchar(1000)
-	,date_updated datetime2
-	,current_bit bit
-
-);
+create view dbo.vw_io
+as
+select db_name(database_id) as [DATABASE_NAME],
+	sum((num_of_bytes_read + num_of_bytes_written)/1048576) as IO_MB
+from sys.dm_io_virtual_file_stats (NULL, NULL)
+group by [database_id];

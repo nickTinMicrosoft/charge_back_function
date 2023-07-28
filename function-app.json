@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.18.4.5664",
-      "templateHash": "8204725580380754729"
+      "version": "0.19.5.34762",
+      "templateHash": "3906077221553422154"
     }
   },
   "parameters": {
@@ -64,13 +64,10 @@
     "gitBranch": {
       "type": "string",
       "defaultValue": "deploy"
-    },
-    "zipUrl": {
-      "type": "string",
-      "defaultValue": "https://github.com/nickTinMicrosoft/charge_back_function/archive/refs/tags/release-7.28.2023.zip"     
     }
   },
   "variables": {
+    "subnetResourceGroup": "[if(equals(parameters('subnetIdForVNETIntegration'), ''), '/0/0/0/0', parameters('subnetIdForVNETIntegration'))]",
     "suffix": "[if(equals(parameters('azureEnvironment'), 'AzureCloud'), 'core.windows.net', 'core.usgovcloudapi.net')]",
     "sku": {
       "name": "B1",
@@ -125,7 +122,7 @@
       "dependsOn": [
         "[resourceId('Microsoft.Web/serverfarms', format('{0}-Plan', parameters('functionName')))]",
         "[resourceId('Microsoft.Storage/storageAccounts', parameters('stroageAccountName'))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, split(parameters('subnetIdForVNETIntegration'), '/')[4]), 'Microsoft.Resources/deployments', format('{0}-Subnet-Delegation', parameters('functionName')))]"
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, split(variables('subnetResourceGroup'), '/')[4]), 'Microsoft.Resources/deployments', format('{0}-Subnet-Delegation', parameters('functionName')))]"
       ]
     },
     {
@@ -147,7 +144,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2022-09-01",
       "name": "[format('{0}-Subnet-Delegation', parameters('functionName'))]",
-      "resourceGroup": "[split(parameters('subnetIdForVNETIntegration'), '/')[4]]",
+      "resourceGroup": "[split(variables('subnetResourceGroup'), '/')[4]]",
       "properties": {
         "expressionEvaluationOptions": {
           "scope": "inner"
@@ -164,8 +161,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.18.4.5664",
-              "templateHash": "13372858735257336480"
+              "version": "0.19.5.34762",
+              "templateHash": "813926873692194781"
             }
           },
           "parameters": {
@@ -197,8 +194,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.18.4.5664",
-                      "templateHash": "12129729955123658448"
+                      "version": "0.19.5.34762",
+                      "templateHash": "1280605346230470647"
                     }
                   },
                   "parameters": {
