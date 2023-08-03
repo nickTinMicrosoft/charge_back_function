@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.19.5.34762",
-      "templateHash": "15288017100812008873"
+      "templateHash": "2028134125901100510"
     }
   },
   "parameters": {
@@ -172,7 +172,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.19.5.34762",
-              "templateHash": "14180114367997143035"
+              "templateHash": "18386422382350523550"
             }
           },
           "parameters": {
@@ -187,7 +187,7 @@
             {
               "type": "Microsoft.Resources/deployments",
               "apiVersion": "2022-09-01",
-              "name": "[format('{0}-Deploy', substring(parameters('subnetName'), 0, 55))]",
+              "name": "Subnet-Setup-Deploy",
               "properties": {
                 "expressionEvaluationOptions": {
                   "scope": "inner"
