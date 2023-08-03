@@ -5,4 +5,4 @@ Select [DATABASE_NAME] =
 	THEN 'RESOURCEDB'ELSE DB_NAME(database_id) END,
 	MEM_MB = COUNT(1)/128
 FROM sys.dm_os_buffer_descriptors
-Group By [database_id];
+Group By [database_id]; 
