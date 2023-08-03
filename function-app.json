@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.19.5.34762",
-      "templateHash": "3906077221553422154"
+      "templateHash": "2038802940308664904"
     }
   },
   "parameters": {
@@ -19,7 +19,15 @@
       "type": "bool",
       "defaultValue": true
     },
-    "subnetIdForVNETIntegration": {
+    "subnetName": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "vnetName": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "vnetResourceGroup": {
       "type": "string",
       "defaultValue": ""
     },
@@ -67,7 +75,6 @@
     }
   },
   "variables": {
-    "subnetResourceGroup": "[if(equals(parameters('subnetIdForVNETIntegration'), ''), '/0/0/0/0', parameters('subnetIdForVNETIntegration'))]",
     "suffix": "[if(equals(parameters('azureEnvironment'), 'AzureCloud'), 'core.windows.net', 'core.usgovcloudapi.net')]",
     "sku": {
       "name": "B1",
@@ -118,11 +125,11 @@
         "type": "SystemAssigned"
       },
       "tags": "[parameters('tags')]",
-      "properties": "[if(equals(parameters('sqlMiPublicEndpoint'), true()), createObject('enabled', true(), 'serverFarmId', resourceId('Microsoft.Web/serverfarms', format('{0}-Plan', parameters('functionName'))), 'siteConfig', createObject('appSettings', createArray(createObject('name', 'FUNCTIONS_EXTENSION_VERSION', 'value', '~4'), createObject('name', 'FUNCTIONS_WORKER_RUNTIME', 'value', 'powershell'), createObject('name', 'AzureWebJobsStorage', 'value', format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix={2}', parameters('stroageAccountName'), listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('stroageAccountName')), '2022-09-01').keys[0].value, variables('suffix'))), createObject('name', 'RESOURCE_GROUP', 'value', parameters('managedInstanceResourceGroup')), createObject('name', 'MANAGED_INSTANCE_NAME', 'value', parameters('managedInstanceName')), createObject('name', 'SQL_USER_NAME', 'value', parameters('sqlUserName')), createObject('name', 'SQL_USER_PASSWORD', 'value', parameters('sqlPassword')), createObject('name', 'SQL_CONNECTION_STRING', 'value', parameters('sqlConnectionString'))), 'netFrameworkVersion', 'v6.0', 'powerShellVersion', '7.2', 'alwaysOn', true(), 'cors', createObject('allowedOrigins', createArray('https://portal.azure.com')))), createObject('enabled', true(), 'serverFarmId', resourceId('Microsoft.Web/serverfarms', format('{0}-Plan', parameters('functionName'))), 'siteConfig', createObject('appSettings', createArray(createObject('name', 'FUNCTIONS_EXTENSION_VERSION', 'value', '~4'), createObject('name', 'FUNCTIONS_WORKER_RUNTIME', 'value', 'powershell'), createObject('name', 'AzureWebJobsStorage', 'value', format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix={2}', parameters('stroageAccountName'), listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('stroageAccountName')), '2022-09-01').keys[0].value, variables('suffix'))), createObject('name', 'RESOURCE_GROUP', 'value', parameters('managedInstanceResourceGroup')), createObject('name', 'MANAGED_INSTANCE_NAME', 'value', parameters('managedInstanceName')), createObject('name', 'SQL_USER_NAME', 'value', parameters('sqlUserName')), createObject('name', 'SQL_USER_PASSWORD', 'value', parameters('sqlPassword')), createObject('name', 'SQL_CONNECTION_STRING', 'value', parameters('sqlConnectionString'))), 'netFrameworkVersion', 'v6.0', 'powerShellVersion', '7.2', 'alwaysOn', true(), 'cors', createObject('allowedOrigins', createArray('https://portal.azure.com'))), 'virtualNetworkSubnetId', parameters('subnetIdForVNETIntegration'), 'vnetRouteAllEnabled', parameters('vnetRouteAll')))]",
+      "properties": "[if(equals(parameters('sqlMiPublicEndpoint'), true()), createObject('enabled', true(), 'serverFarmId', resourceId('Microsoft.Web/serverfarms', format('{0}-Plan', parameters('functionName'))), 'siteConfig', createObject('appSettings', createArray(createObject('name', 'FUNCTIONS_EXTENSION_VERSION', 'value', '~4'), createObject('name', 'FUNCTIONS_WORKER_RUNTIME', 'value', 'powershell'), createObject('name', 'AzureWebJobsStorage', 'value', format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix={2}', parameters('stroageAccountName'), listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('stroageAccountName')), '2022-09-01').keys[0].value, variables('suffix'))), createObject('name', 'RESOURCE_GROUP', 'value', parameters('managedInstanceResourceGroup')), createObject('name', 'MANAGED_INSTANCE_NAME', 'value', parameters('managedInstanceName')), createObject('name', 'SQL_USER_NAME', 'value', parameters('sqlUserName')), createObject('name', 'SQL_USER_PASSWORD', 'value', parameters('sqlPassword')), createObject('name', 'SQL_CONNECTION_STRING', 'value', parameters('sqlConnectionString'))), 'netFrameworkVersion', 'v6.0', 'powerShellVersion', '7.2', 'alwaysOn', true(), 'cors', createObject('allowedOrigins', createArray('https://portal.azure.com')))), createObject('enabled', true(), 'serverFarmId', resourceId('Microsoft.Web/serverfarms', format('{0}-Plan', parameters('functionName'))), 'siteConfig', createObject('appSettings', createArray(createObject('name', 'FUNCTIONS_EXTENSION_VERSION', 'value', '~4'), createObject('name', 'FUNCTIONS_WORKER_RUNTIME', 'value', 'powershell'), createObject('name', 'AzureWebJobsStorage', 'value', format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix={2}', parameters('stroageAccountName'), listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('stroageAccountName')), '2022-09-01').keys[0].value, variables('suffix'))), createObject('name', 'RESOURCE_GROUP', 'value', parameters('managedInstanceResourceGroup')), createObject('name', 'MANAGED_INSTANCE_NAME', 'value', parameters('managedInstanceName')), createObject('name', 'SQL_USER_NAME', 'value', parameters('sqlUserName')), createObject('name', 'SQL_USER_PASSWORD', 'value', parameters('sqlPassword')), createObject('name', 'SQL_CONNECTION_STRING', 'value', parameters('sqlConnectionString'))), 'netFrameworkVersion', 'v6.0', 'powerShellVersion', '7.2', 'alwaysOn', true(), 'cors', createObject('allowedOrigins', createArray('https://portal.azure.com'))), 'virtualNetworkSubnetId', format('{0}/resourceGroups/{1}/providers/Microsoft.Network/virtualNetworks/{2}/subnets/{3}', subscription().id, parameters('vnetResourceGroup'), parameters('vnetName'), parameters('subnetName')), 'vnetRouteAllEnabled', parameters('vnetRouteAll')))]",
       "dependsOn": [
         "[resourceId('Microsoft.Web/serverfarms', format('{0}-Plan', parameters('functionName')))]",
         "[resourceId('Microsoft.Storage/storageAccounts', parameters('stroageAccountName'))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, split(variables('subnetResourceGroup'), '/')[4]), 'Microsoft.Resources/deployments', format('{0}-Subnet-Delegation', parameters('functionName')))]"
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('vnetResourceGroup')), 'Microsoft.Resources/deployments', format('{0}-Subnet-Delegation', parameters('functionName')))]"
       ]
     },
     {
@@ -144,15 +151,18 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2022-09-01",
       "name": "[format('{0}-Subnet-Delegation', parameters('functionName'))]",
-      "resourceGroup": "[split(variables('subnetResourceGroup'), '/')[4]]",
+      "resourceGroup": "[parameters('vnetResourceGroup')]",
       "properties": {
         "expressionEvaluationOptions": {
           "scope": "inner"
         },
         "mode": "Incremental",
         "parameters": {
-          "subnetId": {
-            "value": "[parameters('subnetIdForVNETIntegration')]"
+          "subnetName": {
+            "value": "[parameters('subnetName')]"
+          },
+          "vnetName": {
+            "value": "[parameters('vnetName')]"
           }
         },
         "template": {
@@ -162,11 +172,14 @@
             "_generator": {
               "name": "bicep",
               "version": "0.19.5.34762",
-              "templateHash": "813926873692194781"
+              "templateHash": "2355108139447492543"
             }
           },
           "parameters": {
-            "subnetId": {
+            "subnetName": {
+              "type": "string"
+            },
+            "vnetName": {
               "type": "string"
             }
           },
@@ -174,7 +187,7 @@
             {
               "type": "Microsoft.Resources/deployments",
               "apiVersion": "2022-09-01",
-              "name": "[format('{0}-Subnet-Setup', split(parameters('subnetId'), '/')[10])]",
+              "name": "[format('{0}-Subnet-Setup', parameters('subnetName'))]",
               "properties": {
                 "expressionEvaluationOptions": {
                   "scope": "inner"
@@ -182,10 +195,10 @@
                 "mode": "Incremental",
                 "parameters": {
                   "subnetId": {
-                    "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', split(parameters('subnetId'), '/')[8], split(parameters('subnetId'), '/')[10])]"
+                    "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('subnetName'))]"
                   },
                   "properties": {
-                    "value": "[reference(resourceId('Microsoft.Network/virtualNetworks/subnets', split(parameters('subnetId'), '/')[8], split(parameters('subnetId'), '/')[10]), '2022-07-01')]"
+                    "value": "[reference(resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('subnetName')), '2022-07-01')]"
                   }
                 },
                 "template": {
@@ -224,7 +237,7 @@
           "outputs": {
             "properties": {
               "type": "object",
-              "value": "[reference(resourceId('Microsoft.Network/virtualNetworks/subnets', split(parameters('subnetId'), '/')[8], split(parameters('subnetId'), '/')[10]), '2022-07-01')]"
+              "value": "[reference(resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('subnetName')), '2022-07-01')]"
             }
           }
         }
