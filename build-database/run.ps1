@@ -49,7 +49,7 @@ if($action -eq "build"){
     #execute build Database
 
     #get list of file names
-    $path = 'c:\home\site\wwroot\SQL'
+    $path = '.\SQL'
     $fileList = Get-ChildItem -Path $path -File
     $step = 1
 

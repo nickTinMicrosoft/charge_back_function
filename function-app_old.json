@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.25.53.49325",
-      "templateHash": "14284177776606905283"
+      "version": "0.19.5.34762",
+      "templateHash": "2028134125901100510"
     }
   },
   "parameters": {
@@ -129,7 +129,7 @@
       "dependsOn": [
         "[resourceId('Microsoft.Web/serverfarms', format('{0}-Plan', parameters('functionName')))]",
         "[resourceId('Microsoft.Storage/storageAccounts', parameters('stroageAccountName'))]",
-        "[resourceId('Microsoft.Resources/deployments', format('{0}-Subnet-Delegation', parameters('functionName')))]"
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('vnetResourceGroup')), 'Microsoft.Resources/deployments', format('{0}-Subnet-Delegation', parameters('functionName')))]"
       ]
     },
     {
@@ -151,6 +151,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2022-09-01",
       "name": "[format('{0}-Subnet-Delegation', parameters('functionName'))]",
+      "resourceGroup": "[parameters('vnetResourceGroup')]",
       "properties": {
         "expressionEvaluationOptions": {
           "scope": "inner"
@@ -162,9 +163,6 @@
           },
           "vnetName": {
             "value": "[parameters('vnetName')]"
-          },
-          "vnetResourceGroup": {
-            "value": "[parameters('vnetResourceGroup')]"
           }
         },
         "template": {
@@ -173,8 +171,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.25.53.49325",
-              "templateHash": "8325486945509849169"
+              "version": "0.19.5.34762",
+              "templateHash": "18386422382350523550"
             }
           },
           "parameters": {
@@ -183,63 +181,13 @@
             },
             "vnetName": {
               "type": "string"
-            },
-            "vnetResourceGroup": {
-              "type": "string"
             }
           },
           "resources": [
             {
               "type": "Microsoft.Resources/deployments",
               "apiVersion": "2022-09-01",
-              "name": "[format('{0}-Info-Deploy', replace(parameters('subnetName'), '-', ''))]",
-              "resourceGroup": "[parameters('vnetResourceGroup')]",
-              "properties": {
-                "expressionEvaluationOptions": {
-                  "scope": "inner"
-                },
-                "mode": "Incremental",
-                "parameters": {
-                  "subnetName": {
-                    "value": "[parameters('subnetName')]"
-                  },
-                  "vnetName": {
-                    "value": "[parameters('vnetName')]"
-                  }
-                },
-                "template": {
-                  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-                  "contentVersion": "1.0.0.0",
-                  "metadata": {
-                    "_generator": {
-                      "name": "bicep",
-                      "version": "0.25.53.49325",
-                      "templateHash": "15283595152168190468"
-                    }
-                  },
-                  "parameters": {
-                    "subnetName": {
-                      "type": "string"
-                    },
-                    "vnetName": {
-                      "type": "string"
-                    }
-                  },
-                  "resources": [],
-                  "outputs": {
-                    "subnet": {
-                      "type": "object",
-                      "value": "[reference(resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('subnetName')), '2022-07-01', 'full')]"
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "type": "Microsoft.Resources/deployments",
-              "apiVersion": "2022-09-01",
-              "name": "[format('{0}-Deploy', replace(parameters('subnetName'), '-', ''))]",
-              "resourceGroup": "[parameters('vnetResourceGroup')]",
+              "name": "Subnet-Setup-Deploy",
               "properties": {
                 "expressionEvaluationOptions": {
                   "scope": "inner"
@@ -247,10 +195,10 @@
                 "mode": "Incremental",
                 "parameters": {
                   "subnetId": {
-                    "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('vnetResourceGroup')), 'Microsoft.Resources/deployments', format('{0}-Info-Deploy', replace(parameters('subnetName'), '-', ''))), '2022-09-01').outputs.subnet.value.id]"
+                    "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('subnetName'))]"
                   },
                   "properties": {
-                    "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('vnetResourceGroup')), 'Microsoft.Resources/deployments', format('{0}-Info-Deploy', replace(parameters('subnetName'), '-', ''))), '2022-09-01').outputs.subnet.value.properties]"
+                    "value": "[reference(resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('subnetName')), '2022-07-01')]"
                   }
                 },
                 "template": {
@@ -259,8 +207,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.25.53.49325",
-                      "templateHash": "12553265824585401520"
+                      "version": "0.19.5.34762",
+                      "templateHash": "1280605346230470647"
                     }
                   },
                   "parameters": {
@@ -283,12 +231,15 @@
                     }
                   ]
                 }
-              },
-              "dependsOn": [
-                "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('vnetResourceGroup')), 'Microsoft.Resources/deployments', format('{0}-Info-Deploy', replace(parameters('subnetName'), '-', '')))]"
-              ]
+              }
             }
-          ]
+          ],
+          "outputs": {
+            "properties": {
+              "type": "object",
+              "value": "[reference(resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('subnetName')), '2022-07-01')]"
+            }
+          }
         }
       }
     }
